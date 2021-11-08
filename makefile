@@ -1,5 +1,4 @@
-BINARY_PATH=./bin
-BINARY_NAME=$(BINARY_PATH)/calendar-api
+BINARY_NAME=./calendar-api
 SERVICE_NAME=calendar-api.service
 
 PLATFORMS := linux/amd64/x86_64
@@ -26,7 +25,6 @@ $(PLATFORMS):
 
 clean:
 	go clean
-	rm -f $(BINARY_NAME)
 
 restart:
 	sudo /bin/systemctl restart $(SERVICE_NAME)
