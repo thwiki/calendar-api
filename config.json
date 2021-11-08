@@ -1,0 +1,7 @@
+{
+  "push": [],
+  "gzip": false,
+  "ports": {
+    "http": 8069
+  }
+}

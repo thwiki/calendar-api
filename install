@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "[Unit]
+Description=Serves Calendar API
+After=syslog.target network.target remote-fs.target nss-lookup.target
+[Service]
+Type=simple
+User=$(stat -c '%U' $(pwd)/bin/calendar-api)
+PIDFile=/run/calendar-api.pid
+WorkingDirectory=$(pwd)
+ExecStart=$(pwd)/bin/calendar-api
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=calendar-apiservice
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target
+" > /lib/systemd/system/calendar-api.service
+
+chown root:root /lib/systemd/system/calendar-api.service
