@@ -1,3 +1,5 @@
+VERSION := "2.0.0"
+
 BINARY_NAME=./calendar-api
 SERVICE_NAME=calendar-api.service
 
@@ -21,7 +23,7 @@ check:
 build: check clean $(PLATFORMS)
 
 $(PLATFORMS):
-	env GOOS=$(os) GOARCH=$(arch) go build -trimpath -ldflags="-s -w" -o $(BINARY_NAME) .
+	env GOOS=$(os) GOARCH=$(arch) go build -trimpath -ldflags="-s -w -X 'main.Version=${VERSION}'" -o $(BINARY_NAME) .
 
 clean:
 	go clean

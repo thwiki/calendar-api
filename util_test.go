@@ -85,3 +85,102 @@ func TestSanitizeDateInvalid(t *testing.T) {
 	assert.Equal(t, "", date)
 	assert.Error(t, &InvalidDateError{}, err)
 }
+
+func TestFormatSMWDateValid(t *testing.T) {
+	var date string
+	var err error
+
+	// Standard
+	date, err = SanitizeSMWDate("1/2010/01/01")
+	assert.Equal(t, "2010-01-01", date)
+	assert.Nil(t, err)
+
+	// Standard with Time
+	date, err = SanitizeSMWDate("1/2010/01/01/08/12/20/0")
+	assert.Equal(t, "2010-01-01", date)
+	assert.Nil(t, err)
+
+	// Non Standard
+	date, err = SanitizeSMWDate("2010/01/01")
+	assert.Equal(t, "2010-01-01", date)
+	assert.Nil(t, err)
+
+	// Missing Time Part
+	date, err = SanitizeSMWDate("1/2010/01/01/08")
+	assert.Equal(t, "2010-01-01", date)
+	assert.Nil(t, err)
+}
+
+func TestFormatSMWDateInalid(t *testing.T) {
+	var date string
+	var err error
+
+	// Missing Date Part
+	date, err = SanitizeSMWDate("1/2010/01")
+	assert.Equal(t, "", date)
+	assert.Error(t, &InvalidDateError{}, err)
+
+	date, err = SanitizeSMWDate("2010/01")
+	assert.Equal(t, "", date)
+	assert.Error(t, &InvalidDateError{}, err)
+}
+
+func TestSanitizeWikiText(t *testing.T) {
+	var result string
+
+	// Normal Text
+	result = SanitizeWikiText("abcd efgh")
+	assert.Equal(t, "abcd efgh", result)
+
+	// Internal Links
+	result = SanitizeWikiText("abcd [[cat]] efgh")
+	assert.Equal(t, "abcd cat efgh", result)
+
+	// Internal Links with Text
+	result = SanitizeWikiText("abcd [[cat|dog]] efgh")
+	assert.Equal(t, "abcd dog efgh", result)
+
+	// Internal Links with Text and Spaces
+	result = SanitizeWikiText("abcd[[ cat | dog ]]efgh")
+	assert.Equal(t, "abcd dog efgh", result)
+
+	// External Links
+	result = SanitizeWikiText("abcd [https://thwiki.cc/] efgh")
+	assert.Equal(t, "abcd  efgh", result)
+
+	// External Links with Text
+	result = SanitizeWikiText("abcd [https://thwiki.cc/ dog] efgh")
+	assert.Equal(t, "abcd dog efgh", result)
+
+	// External Links with Text and Spaces
+	result = SanitizeWikiText("abcd[https://thwiki.cc/  dog ]efgh")
+	assert.Equal(t, "abcd dog efgh", result)
+
+	// Normal Quotes
+	result = SanitizeWikiText("abcd 'cat' efgh")
+	assert.Equal(t, "abcd 'cat' efgh", result)
+
+	// Bold
+	result = SanitizeWikiText("abcd '''cat''' efgh")
+	assert.Equal(t, "abcd <b>cat</b> efgh", result)
+
+	// Bold with Spaces
+	result = SanitizeWikiText("abcd''' cat '''efgh")
+	assert.Equal(t, "abcd<b> cat </b>efgh", result)
+
+	// Italic
+	result = SanitizeWikiText("abcd ''cat'' efgh")
+	assert.Equal(t, "abcd <i>cat</i> efgh", result)
+
+	// Italic with Spaces
+	result = SanitizeWikiText("abcd'' cat ''efgh")
+	assert.Equal(t, "abcd<i> cat </i>efgh", result)
+
+	// Bold and Italic
+	result = SanitizeWikiText("abcd '''''cat''''' efgh")
+	assert.Equal(t, "abcd <i><b>cat</b></i> efgh", result)
+
+	// Bold and Italic with Spaces
+	result = SanitizeWikiText("abcd''''' cat '''''efgh")
+	assert.Equal(t, "abcd<i><b> cat </b></i>efgh", result)
+}
