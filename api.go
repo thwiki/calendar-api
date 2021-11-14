@@ -124,7 +124,7 @@ func GetEvents(start string, end string) (bytes []byte, err error) {
 		Action:        "ask",
 		Format:        "json",
 		Formatversion: 2,
-		Query:         "[[事件开始::>" + start + "]][[事件开始::<" + end + "]]|?事件编号=code|?事件颜色=color|?事件页面=name|?事件开始=start|?事件结束=end|?事件描述=desc|?事件图标=icon|sort=事件开始|order=asc",
+		Query:         "[[事件开始::>" + start + "]][[事件开始::<" + end + "]]|?事件类型=type|?事件颜色=color|?事件页面=name|?事件开始=start|?事件结束=end|?事件描述=desc|?事件图标=icon|sort=事件开始|order=asc",
 	})
 
 	if err != nil {
@@ -196,11 +196,9 @@ func ConvertApiResult(response *SMWResponse) (result ApiResult, err error) {
 
 		resultEntry.Url = entry.Fullurl
 
+		resultEntry.Type = entry.Printouts.Type
 		if len(entry.Printouts.Icon) > 0 {
 			resultEntry.Icon = entry.Printouts.Icon[0].Fullurl
-		}
-		if len(entry.Printouts.Code) > 0 {
-			resultEntry.Code = entry.Printouts.Code[0]
 		}
 		if len(entry.Printouts.Color) > 0 {
 			resultEntry.Color = entry.Printouts.Color[0]

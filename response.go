@@ -27,7 +27,7 @@ type SMWResponseResult struct {
 
 type SMWResponseResultEntry struct {
 	Printouts struct {
-		Code  []string `json:"code"`
+		Type  []string `json:"type"`
 		Color []string `json:"color"`
 		Name  []string `json:"name"`
 		Start []struct {
@@ -71,17 +71,17 @@ type ApiResult struct {
 }
 
 type ApiResultEntry struct {
-	Id       string `json:"id"`
-	Start    int    `json:"start"`
-	End      int    `json:"end"`
-	StartStr string `json:"startStr"`
-	EndStr   string `json:"endStr"`
-	Title    string `json:"title"`
-	Desc     string `json:"desc"`
-	Url      string `json:"url"`
-	Icon     string `json:"icon,omitempty"`
-	Code     string `json:"code,omitempty"`
-	Color    string `json:"color,omitempty"`
+	Id       string   `json:"id"`
+	Start    int      `json:"start"`
+	End      int      `json:"end"`
+	StartStr string   `json:"startStr"`
+	EndStr   string   `json:"endStr"`
+	Title    string   `json:"title"`
+	Desc     string   `json:"desc"`
+	Url      string   `json:"url"`
+	Icon     string   `json:"icon,omitempty"`
+	Type     []string `json:"type,omitempty"`
+	Color    string   `json:"color,omitempty"`
 }
 
 func (r *SMWResponseResult) UnmarshalJSON(data []byte) error {

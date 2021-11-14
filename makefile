@@ -1,4 +1,4 @@
-VERSION := "2.0.0"
+VERSION := "2.1.0"
 
 BINARY_NAME=./calendar-api
 SERVICE_NAME=calendar-api.service
